@@ -41,7 +41,6 @@ def sanitize_text(text: str, remove_stopwords: bool) -> str:
     # remove special chars and numbers
     text = re.sub("[^А-Яа-я]+", " ", text)
     # remove stopwords
-    remove_stopwords = False
     if remove_stopwords:
         # 1. tokenize
         tokens = nltk.word_tokenize(text)
@@ -49,11 +48,16 @@ def sanitize_text(text: str, remove_stopwords: bool) -> str:
         tokens = [w for w in tokens if not w.lower() in STOPWORDS]
         # 3. join back together
         text = " ".join(tokens)
-    terms_normalized = []
-    for term in term_extractor(text):
-        terms_normalized.append(term.normalized.replace(' ','_'))
-    text = ' '.join(terms_normalized)
-    #text = " ".join(ma.parse(word)[0].normal_form for word in text.split())
+    #terms_normalized = []
+    #for term in term_extractor(text):
+        #terms_normalized.append(term.normalized.replace(' ','_'))
+    #text = ' '.join(terms_normalized)
+    text = " ".join(ma.parse(word)[0].normal_form for word in text.split())
+    new_text = []
+    for word in text.split():
+      if word not in stops and len(word)>3 and (ma.parse(word)[0].tag.POS == 'NOUN' or ma.parse(word)[0].tag.POS == 'INFN'):
+        new_text.append(word)
+    text = ' '.join(new_text)
     # return text in lower case and stripped of whitespaces
     text = text.lower().strip()
     return text
