@@ -1,12 +1,10 @@
 import re
 import nltk
 from nltk.corpus import stopwords
-from rutermextract import TermExtractor
 
 import pkgutil
 import pymorphy2, re
 ma = pymorphy2.MorphAnalyzer()
-term_extractor = TermExtractor()
 
 
 STOPWORDS = list(set(stopwords.words("russian")))
@@ -55,7 +53,7 @@ def sanitize_text(text: str, remove_stopwords: bool) -> str:
     text = " ".join(ma.parse(word)[0].normal_form for word in text.split())
     new_text = []
     for word in text.split():
-      if word not in stops and len(word)>3 and (ma.parse(word)[0].tag.POS == 'NOUN' or ma.parse(word)[0].tag.POS == 'INFN'):
+      if len(word)>3 and (ma.parse(word)[0].tag.POS == 'NOUN' or ma.parse(word)[0].tag.POS == 'INFN'):
         new_text.append(word)
     text = ' '.join(new_text)
     # return text in lower case and stripped of whitespaces
