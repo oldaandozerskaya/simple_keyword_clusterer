@@ -51,11 +51,11 @@ def sanitize_text(text: str, remove_stopwords: bool) -> str:
         #terms_normalized.append(term.normalized.replace(' ','_'))
     #text = ' '.join(terms_normalized)
     text = " ".join(ma.parse(word)[0].normal_form for word in text.split())
-    new_text = []
-    for word in text.split():
-      if len(word)>3 and (ma.parse(word)[0].tag.POS == 'NOUN' or ma.parse(word)[0].tag.POS == 'INFN'):
-        new_text.append(word)
-    text = ' '.join(new_text)
+    #new_text = []
+    #for word in text.split():
+      #if len(word)>3 and (ma.parse(word)[0].tag.POS == 'NOUN' or ma.parse(word)[0].tag.POS == 'INFN'):
+        #new_text.append(word)
+    #text = ' '.join(new_text)
     # return text in lower case and stripped of whitespaces
     text = text.lower().strip()
     return text
