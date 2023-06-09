@@ -3,9 +3,11 @@ import nltk
 from nltk.corpus import stopwords
 
 import pkgutil
+import pymorphy2, re
+ma = pymorphy2.MorphAnalyzer()
 
 
-STOPWORDS = list(set(stopwords.words("english")))
+STOPWORDS = list(set(stopwords.words("russian")))
 
 to_remove = pkgutil.get_data(__package__, 'blacklist.txt').decode('utf8').splitlines()
 
@@ -35,7 +37,7 @@ def sanitize_text(text: str, remove_stopwords: bool) -> str:
     # remove links
     text = re.sub(r"http\S+", "", text)
     # remove special chars and numbers
-    text = re.sub("[^A-Za-z]+", " ", text)
+    text = re.sub("[^А-Яа-я]+", " ", text)
     # remove stopwords
     if remove_stopwords:
         # 1. tokenize
@@ -44,6 +46,7 @@ def sanitize_text(text: str, remove_stopwords: bool) -> str:
         tokens = [w for w in tokens if not w.lower() in STOPWORDS]
         # 3. join back together
         text = " ".join(tokens)
+    text = " ".join(ma.parse(word)[0].normal_form for word in text.split())
     # return text in lower case and stripped of whitespaces
     text = text.lower().strip()
     return text
