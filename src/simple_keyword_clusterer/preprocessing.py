@@ -6,6 +6,7 @@ from rutermextract import TermExtractor
 import pkgutil
 import pymorphy2, re
 ma = pymorphy2.MorphAnalyzer()
+term_extractor = TermExtractor()
 
 
 STOPWORDS = list(set(stopwords.words("russian")))
